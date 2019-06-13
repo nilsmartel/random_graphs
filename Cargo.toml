@@ -1,0 +1,9 @@
+[package]
+name = "graph"
+version = "0.1.0"
+authors = ["Nils Martel <akantorabc@yahoo.de>"]
+edition = "2018"
+
+[dependencies]
+rand = "0.6.5"
+mini_gl_fb = "0.7.0"    # Quick and easy window creation, input, and high speed bitmap rendering
