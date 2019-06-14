@@ -6,7 +6,7 @@ pub struct Line {
 }
 
 struct LineItem {
-    pos: Point,
+    pos: Point<i32>,
     progress: f64,
 }
 
@@ -21,7 +21,7 @@ impl Iterator for Line {
 }
 
 impl Line {
-    pub fn new(start: Point, end: Point) -> Line {
+    pub fn new(start: Point<i32>, end: Point<i32>) -> Line {
         let path = start - end;
 
         let steps = if path.x().abs() > path.y().abs() {
@@ -54,7 +54,15 @@ where
         + std::ops::Mul<Output = T>
         + std::ops::Div<Output = T>;
 
-impl<T> Point<T> {
+impl<T> Point<T>
+where
+    T: Copy
+        + Clone
+        + std::ops::Add<Output = T>
+        + std::ops::Sub<Output = T>
+        + std::ops::Mul<Output = T>
+        + std::ops::Div<Output = T>,
+{
     #[inline]
     pub fn new(x: T, y: T) -> Point<T> {
         Point(x, y)
@@ -71,16 +79,62 @@ impl<T> Point<T> {
     }
 }
 
-impl std::ops::Add for Point {
+impl<T> std::ops::Add for Point<T>
+where
+    T: Copy
+        + Clone
+        + std::ops::Add<Output = T>
+        + std::ops::Sub<Output = T>
+        + std::ops::Mul<Output = T>
+        + std::ops::Div<Output = T>,
+{
     type Output = Self;
-    fn add(self, other: Point) -> Point {
+    fn add(self, other: Self) -> Self::Output {
         Point(self.0 + other.0, self.1 + other.1)
     }
 }
 
-impl std::ops::Sub for Point {
+impl<T> std::ops::Sub for Point<T>
+where
+    T: Copy
+        + Clone
+        + std::ops::Add<Output = T>
+        + std::ops::Sub<Output = T>
+        + std::ops::Mul<Output = T>
+        + std::ops::Div<Output = T>,
+{
     type Output = Self;
-    fn sub(self, other: Point) -> Point {
+    fn sub(self, other: Self) -> Self::Output {
         Point(self.0 - other.0, self.1 - other.1)
+    }
+}
+
+impl<T> std::ops::Mul<T> for Point<T>
+where
+    T: Copy
+        + Clone
+        + std::ops::Add<Output = T>
+        + std::ops::Sub<Output = T>
+        + std::ops::Mul<Output = T>
+        + std::ops::Div<Output = T>,
+{
+    type Output = Self;
+    fn mul(self, factor: T) -> Self::Output {
+        Point(self.0 * factor, self.1 * factor)
+    }
+}
+
+impl<T> std::ops::Div<T> for Point<T>
+where
+    T: Copy
+        + Clone
+        + std::ops::Add<Output = T>
+        + std::ops::Sub<Output = T>
+        + std::ops::Mul<Output = T>
+        + std::ops::Div<Output = T>,
+{
+    type Output = Self;
+    fn div(self, factor: T) -> Self::Output {
+        Point(self.0 / factor, self.1 / factor)
     }
 }
