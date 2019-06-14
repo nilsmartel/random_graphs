@@ -13,9 +13,9 @@ pub struct LineIterator {
     position_increment: Point<f64>,
 }
 
-struct LineItem {
-    pos: Point<i32>,
-    progress: f64,
+pub struct LineItem {
+    pub pos: Point<i32>,
+    pub progress: f64,
 }
 
 impl Iterator for LineIterator {
@@ -25,12 +25,21 @@ impl Iterator for LineIterator {
         if self.current == self.steps {
             return None;
         }
+
+        let result = LineItem {
+            pos: self.current_position.into(),
+            progress: self.progress(),
+        };
+        self.current_position = self.current_position + self.position_increment;
+        self.current += 1;
+
+        Some(result)
     }
 }
 
-impl Line {
-    pub fn new(start: Point<i32>, end: Point<i32>) -> Line {
-        let path = start - end;
+impl LineIterator {
+    pub fn new(start: Point<i32>, end: Point<i32>) -> LineIterator {
+        let path: Point<i32> = start - end;
 
         let steps = if path.x().abs() > path.y().abs() {
             path.x().abs() as usize
@@ -38,11 +47,19 @@ impl Line {
             path.y().abs() as usize
         };
 
-        Line {
+        // TODO ask on users.rust-lang.org how to do this without temporary var
+        let path: Point<f64> = path.into();
+        let position_increment = path / (steps as f64);
+
+        let current_position: Point<f64> = start.into();
+
+        LineIterator {
             start,
             end,
             current: 0,
             steps,
+            current_position,
+            position_increment,
         }
     }
 
