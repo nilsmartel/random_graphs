@@ -1,8 +1,16 @@
-pub struct Line {
+pub struct LineIterator {
     start: Point<i32>,
     end: Point<i32>,
+
+    // current step
     current: usize,
+    // (max) number of steps to take until the iterator has completed
     steps: usize,
+
+    // Current Position on the line.
+    current_position: Point<f64>,
+    // Steps to increment current position on line.
+    position_increment: Point<f64>,
 }
 
 struct LineItem {
@@ -10,7 +18,7 @@ struct LineItem {
     progress: f64,
 }
 
-impl Iterator for Line {
+impl Iterator for LineIterator {
     type Item = LineItem;
 
     fn next(&mut self) -> Option<LineItem> {
@@ -41,6 +49,30 @@ impl Line {
     #[inline]
     pub fn progress(&self) -> f64 {
         self.current as f64 / self.steps as f64
+    }
+}
+
+impl From<Point<i32>> for Point<f64> {
+    fn from(p: Point<i32>) -> Self {
+        Point(p.x() as f64, p.y() as f64)
+    }
+}
+
+impl From<Point<i32>> for Point<f32> {
+    fn from(p: Point<i32>) -> Self {
+        Point(p.x() as f32, p.y() as f32)
+    }
+}
+
+impl From<Point<f32>> for Point<i32> {
+    fn from(p: Point<f32>) -> Self {
+        Point(p.x() as i32, p.y() as i32)
+    }
+}
+
+impl From<Point<f64>> for Point<i32> {
+    fn from(p: Point<f64>) -> Self {
+        Point(p.x() as i32, p.y() as i32)
     }
 }
 
