@@ -1,20 +1,24 @@
 use rand::Rng;
-use std::collections::HashSet;
 
-pub struct Graph<'a> {
-    verts: Vec<Vertex>,
-    edges: HashSet<Edge>,
+pub struct Graph {
+    edges: Vec<(Vertex, Vertex)>,
 }
 
-impl<'a> Graph<'a> {
+impl Graph {
     pub fn new_random(count: usize) -> Self {
         let mut rng = rand::thread_rng();
 
-        let v = (0..count)
+        let verts = (0..count)
             .map(|_| Vertex(rng.gen(), rng.gen(), rng.gen()))
-            .collect::<Vec<Vector>>();
+            .collect::<Vec<Vertex>>();
+
+        let edges = (0..count)
+            .map(move |i| (verts[i], verts[rng.gen_range(0, verts.len())]))
+            .collect::<Vec<_>>();
+
+        Graph { edges }
     }
 }
 
+#[derive(Copy, Clone, Debug)]
 struct Vertex(f32, f32, f32);
-struct Edge<'a>(&'a Vector, &'a Vector);
