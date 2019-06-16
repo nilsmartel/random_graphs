@@ -128,6 +128,21 @@ where
     }
 }
 
+impl<T> Point<T>
+where
+    T: std::cmp::PartialOrd<T>
+        + Copy
+        + Clone
+        + std::ops::Add<Output = T>
+        + std::ops::Sub<Output = T>
+        + std::ops::Mul<Output = T>
+        + std::ops::Div<Output = T>,
+{
+    pub fn in_bounds(&self, start: Self, dimensions: Self) -> bool {
+        self.0 >= start.0 && self.0 < dimensions.0 && self.1 >= start.1 && self.1 < dimensions.1
+    }
+}
+
 impl<T> std::ops::Add for Point<T>
 where
     T: Copy
