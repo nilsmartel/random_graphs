@@ -1,7 +1,4 @@
 pub struct LineIterator {
-    start: Point<i32>,
-    end: Point<i32>,
-
     // current step
     current: usize,
     // (max) number of steps to take until the iterator has completed
@@ -54,8 +51,6 @@ impl LineIterator {
         let current_position: Point<f64> = start.into();
 
         LineIterator {
-            start,
-            end,
             current: 0,
             steps,
             current_position,
