@@ -7,9 +7,9 @@ pub struct Graph {
 impl Graph {
     pub fn new_random(count: usize) -> Self {
         let mut rng = rand::thread_rng();
-
+        let offset = Vertex(-0.5, -0.5, -0.5);
         let verts = (0..count)
-            .map(|_| Vertex(rng.gen(), rng.gen(), rng.gen()))
+            .map(|_| Vertex(rng.gen(), rng.gen(), rng.gen()) + offset)
             .collect::<Vec<Vertex>>();
 
         let edges = (0..count)
