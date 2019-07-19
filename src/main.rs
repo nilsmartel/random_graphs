@@ -5,8 +5,9 @@ use render::coordinates::Point;
 fn main() {
     let width = 512usize;
     let height = 256usize;
+    let dim = Point::new(width as i32, height as i32);;
 
-    let mut buffer = vec![[255, 255, 255, 255]; width * height];
+    let mut buffer: Vec<[u8; 4]> = vec![[255, 255, 255, 255]; width * height];
 
     let count: usize = std::env::args()
         .nth(1)
@@ -23,11 +24,7 @@ fn main() {
         let p1: Point<i32> = Point::new(p1.0, p1.1).into();
         let p2: Point<i32> = Point::new(p2.0, p2.1).into();
         for pxl in render::coordinates::LineIterator::new(p1, p2) {
-            if pxl.pos.x() >= 0
-                && pxl.pos.x() < width as i32
-                && pxl.pos.y() >= 0
-                && pxl.pos.y() < width as i32
-            {
+            if pxl.pos.in_bounds(Point::new(0, 0), dim) {
                 buffer[pxl.pos.x() as usize + pxl.pos.y() as usize * width] = [0, 0, 0, 255]
             }
         }
