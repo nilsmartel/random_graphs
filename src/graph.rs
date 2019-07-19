@@ -1,7 +1,7 @@
 use rand::Rng;
 
 pub struct Graph {
-    edges: Vec<(Vertex, Vertex)>,
+    pub edges: Vec<(Vertex, Vertex)>,
 }
 
 impl Graph {
@@ -21,4 +21,4 @@ impl Graph {
 }
 
 #[derive(Copy, Clone, Debug)]
-struct Vertex(f32, f32, f32);
+pub struct Vertex(pub f32, pub f32, pub f32);
