@@ -1,5 +1,7 @@
 mod graph;
+mod matrix;
 mod render;
+use matrix::Matrix;
 use render::coordinates::Point;
 
 fn main() {
@@ -20,7 +22,9 @@ fn main() {
         .unwrap_or(512);
     let g = graph::Graph::new_random(count);
 
-    for (p1, p2) in g.edges.iter() {
+    let mx = Matrix::new((1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0)) * 64.0;
+    for (p1, p2) in g.edges.iter().map(|(a, b)| (&mx * *a, &mx * *b)) {
+        println!("{:?} to {:?}", p1, p2);
         let p1: Point<i32> = Point::new(p1.0, p1.1).into();
         let p2: Point<i32> = Point::new(p2.0, p2.1).into();
         for pxl in render::coordinates::LineIterator::new(p1, p2) {
@@ -33,4 +37,6 @@ fn main() {
     let mut frame_buffer = mini_gl_fb::gotta_go_fast("Random Graph", width as f64, height as f64);
 
     frame_buffer.update_buffer(&buffer);
+
+    frame_buffer.persist();
 }
